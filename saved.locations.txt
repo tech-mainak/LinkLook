@@ -1,0 +1,88 @@
+
+=== New Location Captured ===
+Latitude: 12.8916925
+Longitude: 77.7197874
+Accuracy: 14.526000022888184 meters
+Google Maps: https://www.google.com/maps/place/12.8916925,77.7197874
+Date: 11Jun2026164652
+
+
+=== New Location Captured ===
+Latitude: 12.8916902
+Longitude: 77.719807
+Accuracy: 13.036999702453613 meters
+Google Maps: https://www.google.com/maps/place/12.8916902,77.719807
+Date: 11Jun2026180219
+
+
+=== New Location Captured ===
+Latitude: 12.891694
+Longitude: 77.7198184
+Accuracy: 17.256000518798828 meters
+Google Maps: https://www.google.com/maps/place/12.891694,77.7198184
+Date: 11Jun2026180623
+
+
+=== New Location Captured ===
+Latitude: 12.891685
+Longitude: 77.7197966
+Accuracy: 17.76799964904785 meters
+Google Maps: https://www.google.com/maps/place/12.891685,77.7197966
+Date: 11Jun2026205813
+
+
+=== New Location Captured ===
+Latitude: 12.891688
+Longitude: 77.7198
+Accuracy: 30.17300033569336 meters
+Google Maps: https://www.google.com/maps/place/12.891688,77.7198
+Date: 11Jun2026205818
+
+
+=== New Location Captured ===
+Latitude: 12.8916943
+Longitude: 77.7198125
+Accuracy: 14.82699966430664 meters
+Google Maps: https://www.google.com/maps/place/12.8916943,77.7198125
+Date: 11Jun2026205854
+
+
+=== New Location Captured ===
+Latitude: 12.8916945
+Longitude: 77.7198156
+Accuracy: 26.531999588012695 meters
+Google Maps: https://www.google.com/maps/place/12.8916945,77.7198156
+Date: 11Jun2026205902
+
+
+=== New Location Captured ===
+Latitude: 12.8916916
+Longitude: 77.7197916
+Accuracy: 17.26799964904785 meters
+Google Maps: https://www.google.com/maps/place/12.8916916,77.7197916
+Date: 11Jun2026210044
+
+
+=== New Location Captured ===
+Latitude: 12.8916954
+Longitude: 77.7198218
+Accuracy: 14.050000190734863 meters
+Google Maps: https://www.google.com/maps/place/12.8916954,77.7198218
+Date: 11Jun2026210126
+
+
+=== New Location Captured ===
+Latitude: 12.8916793
+Longitude: 77.7198283
+Accuracy: 100 meters
+Google Maps: https://www.google.com/maps/place/12.8916793,77.7198283
+Date: 12Jun2026123738
+
+
+=== New Location Captured ===
+Latitude: 12.8916832
+Longitude: 77.71978
+Accuracy: 19.020000457763672 meters
+Google Maps: https://www.google.com/maps/place/12.8916832,77.71978
+Date: 13Jun2026094307
+

